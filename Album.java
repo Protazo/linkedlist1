@@ -49,4 +49,6 @@ public class Album {
         return false;
     }
 
+    public void adsS() {
+    }
 }
