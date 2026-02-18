@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Main {
-    static void main() {
+    public static void main() {
         ArrayList<Album> albumes = new ArrayList<Album>();
         Album citiOfEvil = new Album("citiOfEvil", "Avenged Sevenfold");
         Album MasterOfPuppets = new Album("MasterOfPuppets", "Metallica");
@@ -35,41 +35,47 @@ public class Main {
         citiOfEvil.addToPlaylist("M.I.A", listaReproduccion);
         MasterOfPuppets.addToPlaylist(2, listaReproduccion);
         MasterOfPuppets.addToPlaylist("Orion", listaReproduccion);
+        citiOfEvil.addToPlaylist("Sidewinder", listaReproduccion);
+        citiOfEvil.addToPlaylist("Seize the Day", listaReproduccion);
 
+        play(listaReproduccion);
+
+
+
+
+    }
+
+    public static void play(LinkedList<Cancion> listaReproduccion) {
         ListIterator<Cancion> lista = listaReproduccion.listIterator();
-
-
 
         Scanner scan = new Scanner(System.in);
 
         imprimirMenu();
         int opcion = 0;
+        boolean paraDelante = true;
         do {
 
             try {
-                boolean paraDelante = false;
+
                 int tamanyoLista = listaReproduccion.size();
 
 
-                    if (lista.hasNext()) {
-                        Cancion actual = lista.next();
-                        System.out.println("\nAhora está sonando: " + actual.titulo + "\n");
-                        lista.previous();
-                    } else if (lista.hasPrevious()){
-                        Cancion actual = lista.previous();
-                        System.out.println("\nAhora está sonando: " + actual.titulo + "\n");
-                        lista.next();
-                    }
+                if (lista.hasNext()) {
+                    Cancion actual = lista.next();
+                    System.out.println("\nAhora está sonando: " + actual.titulo + "\n");
+                    lista.previous();
+                } else if (lista.hasPrevious()){
+                    Cancion actual = lista.previous();
+                    System.out.println("\nAhora está sonando: " + actual.titulo + "\n");
+                    lista.next();
+                }
 
-                    System.out.printf("Escribe la opción: ");
-                    opcion = scan.nextInt();
+                System.out.printf("Escribe la opción: ");
+                opcion = scan.nextInt();
 
-
-
-
-
-
-
+                if (opcion < 0 || opcion > 6) {
+                    opcion = 5;
+                }
 
                 switch (opcion) {
 
@@ -82,15 +88,17 @@ public class Main {
                             if (paraDelante) {
                                 if (lista.hasNext()) {
                                     lista.next();
-                                } else {
-                                    System.out.println("\nYa estás en la última canción");
+                                    if (!lista.hasNext()) {
+                                        lista.previous();
+                                        System.out.println("Ya no hay más canciones");
+                                    }
                                 }
                             }
                             if (!paraDelante) {
                                 if (lista.hasPrevious()) {
                                     lista.previous();
                                 } else {
-                                    System.out.println("\nYa estás en la última canción");
+                                    System.out.println("Ya no hay más canciones");
                                 }
                             }
 
@@ -102,15 +110,19 @@ public class Main {
                             if (paraDelante) {
                                 if (lista.hasPrevious()) {
                                     lista.previous();
+
                                 } else {
-                                    System.out.println("\nYa estás en la primera canción");
+                                    System.out.println("Ya no hay más canciones");
                                 }
                             }
                             if (!paraDelante) {
                                 if (lista.hasNext()) {
                                     lista.next();
-                                } else {
-                                    System.out.println("\nYa estás en la primera canción");
+                                    if (!lista.hasNext()) {
+                                        lista.previous();
+                                        System.out.println("Ya no hay más canciones");
+
+                                    }
                                 }
                             }
 
@@ -131,9 +143,11 @@ public class Main {
                         }
                         if (lista.hasPrevious()) {
                             lista.remove();
+                            System.out.println("Se ha borrado la canción");
                             lista.previous();
                         } else {
                             lista.remove();
+                            System.out.println("Se ha borrado la canción");
                             lista.next();
                         }
 
@@ -141,7 +155,7 @@ public class Main {
                 }
 
             } catch (InputMismatchException e) {
-                System.out.println("Solo números");
+                System.out.println("Solo números del 0 al 6");
             } catch (NoSuchElementException e) {
                 System.out.println("No hay más canciones");
                 opcion = 5;
@@ -150,10 +164,6 @@ public class Main {
                 break;
             }
         } while (opcion != 0);
-
-    }
-
-    public static void play(LinkedList<Cancion> listaReproduccion, Iterator<Cancion> lista) {
 
     }
 
